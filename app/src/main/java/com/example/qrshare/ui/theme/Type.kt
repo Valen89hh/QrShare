@@ -11,21 +11,32 @@ import com.example.qrshare.R
 val Rubik = FontFamily(
     Font(R.font.rubik)
 )
+
+val Lato = FontFamily(
+    Font(R.font.lato_bold, weight = FontWeight.Bold)
+)
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = Rubik,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = Rubik,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = Rubik,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
     ),
     titleLarge = TextStyle(
-    fontFamily = Rubik,
-    fontWeight = FontWeight.Normal,
-    fontSize = 22.sp,
-    lineHeight = 28.sp,
-    letterSpacing = 0.sp
+        fontFamily = Lato,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
+        lineHeight = 28.sp,
     ),
     /* Other default text styles to override
 
