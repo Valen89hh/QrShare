@@ -25,12 +25,11 @@ import com.example.qrshare.ui.components.containers.ContainerConstraint
 import com.example.qrshare.ui.components.containers.ContainerImage
 
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(onNavTo: ()->Unit) {
     ContainerImage {
         ButtonPrimary(
-            text = "Inciar", modifier = Modifier.align(Alignment.BottomStart)
-        ) {
-
-        }
+            text = "Inciar", modifier = Modifier.align(Alignment.BottomStart),
+            onClick = onNavTo
+        )
     }
 }

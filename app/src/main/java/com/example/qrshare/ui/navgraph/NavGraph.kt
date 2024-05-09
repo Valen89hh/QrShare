@@ -21,7 +21,9 @@ fun NavGraph(
             startDestination = Route.OnBoarding.route
         ){
             composable(route = Route.OnBoarding.route){
-                OnBoardingScreen()
+                OnBoardingScreen{
+                    navController.navigate(Route.AppHomeDestination.route)
+                }
             }
 
             composable(route = Route.Login.route){
@@ -34,7 +36,7 @@ fun NavGraph(
             startDestination = Route.HomeQr.route
         ){
             composable(route = Route.HomeQr.route){
-
+                Text(text = "Hola daniel")
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.qrshare.ui.theme.Gray33
 
 @Composable
 fun ButtonPrimary(
@@ -22,7 +23,7 @@ fun ButtonPrimary(
             .fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = Gray33
         )
     ) {
         Text(
