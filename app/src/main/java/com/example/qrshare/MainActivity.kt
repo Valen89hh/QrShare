@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.qrshare.ui.navgraph.NavGraph
+import com.example.qrshare.ui.navgraph.Route
 import com.example.qrshare.ui.theme.QrShareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,14 +27,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QrShareTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-
-                    }
-
-                }
+                NavGraph(startDestination = Route.AppStartDestination.route)
             }
         }
     }
