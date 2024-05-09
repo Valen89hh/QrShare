@@ -15,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.SideEffect
 import com.example.qrshare.ui.navgraph.NavGraph
 import com.example.qrshare.ui.navgraph.Route
 import com.example.qrshare.ui.theme.QrShareTheme
@@ -27,6 +30,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QrShareTheme {
+
                 NavGraph(startDestination = Route.AppStartDestination.route)
             }
         }

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.qrshare.ui.presentation.onboarding.OnBoardingScreen
 
 @Composable
 fun NavGraph(
@@ -20,7 +21,7 @@ fun NavGraph(
             startDestination = Route.OnBoarding.route
         ){
             composable(route = Route.OnBoarding.route){
-
+                OnBoardingScreen()
             }
 
             composable(route = Route.Login.route){
