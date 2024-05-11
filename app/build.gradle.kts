@@ -73,6 +73,7 @@ dependencies {
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // ConstaintLayout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
