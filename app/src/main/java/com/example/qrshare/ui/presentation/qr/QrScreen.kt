@@ -1,5 +1,6 @@
 package com.example.qrshare.ui.presentation.qr
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,17 +20,48 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import android.Manifest
+import android.graphics.Bitmap
+import android.widget.Toast
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.qrshare.R
 import com.example.qrshare.ui.components.buttons.ButtonSecondary
 import com.example.qrshare.ui.components.containers.Container
 import com.example.qrshare.ui.components.qr.rememberQrBitmapPainter
 import com.example.qrshare.ui.theme.Gray40
 import com.example.qrshare.ui.theme.Orange
+import com.example.qrshare.utils.BitmapUtils
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun QrScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val storagePermissionState = rememberPermissionState(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    var bitmap by remember {
+        mutableStateOf<Bitmap?>(null)
+    }
+    LaunchedEffect(Unit) {
+        if(!storagePermissionState.status.isGranted){
+            storagePermissionState.launchPermissionRequest()
+        }
+        else if (storagePermissionState.status.shouldShowRationale){
+            Toast.makeText(context, "No se han otorgado permisos", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(context, "Permisos otorgados", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Container {
         Column(
             modifier = Modifier
@@ -39,16 +71,32 @@ fun QrScreen(modifier: Modifier = Modifier) {
             TopBar()
 
             Image(
-                painter = rememberQrBitmapPainter("https://dev.to"),
+                painter = rememberQrBitmapPainter("https://dev.to", onChangeBitmap = { bitmap = it}),
                 contentDescription = "DEV Communit Code",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.size(250.dp)
+                modifier = Modifier
+                    .size(250.dp)
                     .align(Alignment.CenterHorizontally),
             )
             ButtonSecondary(
                 text = "Compartir",
                 modifier = Modifier.fillMaxWidth()
             ) {
+                if(bitmap != null){
+                    val qrUri = BitmapUtils.getImageUri(context, bitmap!!)
+                    if (qrUri != null){
+                        val sendIntent: Intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_STREAM, qrUri)
+                            type = "image/jpg"
+                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        }
+                        context.startActivity(Intent.createChooser(sendIntent, null))
+                    }else{
+                        Toast.makeText(context,"Upps, ocurrio un error intenta más tarde", Toast.LENGTH_LONG).show()
+                    }
+
+                }
 
             }
         }
