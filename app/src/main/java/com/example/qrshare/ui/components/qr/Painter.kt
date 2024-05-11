@@ -25,7 +25,8 @@ import kotlinx.coroutines.launch
 fun rememberQrBitmapPainter(
     content: String,
     size: Dp = 150.dp,
-    padding: Dp = 0.dp
+    padding: Dp = 0.dp,
+    onChangeBitmap: (bit: Bitmap)->Unit
 ): BitmapPainter {
 
     val density = LocalDensity.current
@@ -75,6 +76,7 @@ fun rememberQrBitmapPainter(
             }
 
             bitmap = newBitmap
+            onChangeBitmap(newBitmap)
         }
     }
 

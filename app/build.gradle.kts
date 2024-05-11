@@ -90,6 +90,9 @@ dependencies {
     //Qr
     implementation("com.google.zxing:core:3.5.1")
 
+    //Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
