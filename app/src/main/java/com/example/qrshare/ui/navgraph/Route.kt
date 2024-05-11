@@ -5,6 +5,7 @@ sealed class Route(val route: String) {
     object AppStartDestination: Route(route = "appStartDestination")
     object OnBoarding: Route(route = "onBoarding")
     object Login: Route(route = "login")
+    object Access: Route(route = "access")
 
     //Navegación Principal
     object AppHomeDestination: Route(route = "appHomeDestination")

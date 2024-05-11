@@ -28,7 +28,7 @@ import com.example.qrshare.ui.components.containers.ContainerImage
 fun OnBoardingScreen(onNavTo: ()->Unit) {
     ContainerImage {
         ButtonPrimary(
-            text = "Inciar", modifier = Modifier.align(Alignment.BottomStart),
+            text = "Inciar", modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth(),
             onClick = onNavTo
         )
     }
