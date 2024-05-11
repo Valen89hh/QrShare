@@ -87,6 +87,9 @@ dependencies {
     //System ui
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.4-beta")
 
+    //Qr
+    implementation("com.google.zxing:core:3.5.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
