@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.qrshare.ui.presentation.access.AccessScreen
+import com.example.qrshare.ui.presentation.login.LoginScreen
 import com.example.qrshare.ui.presentation.onboarding.OnBoardingScreen
 
 @Composable
@@ -22,12 +24,19 @@ fun NavGraph(
         ){
             composable(route = Route.OnBoarding.route){
                 OnBoardingScreen{
-                    navController.navigate(Route.AppHomeDestination.route)
+                    navController.navigate(Route.Access.route)
                 }
             }
 
-            composable(route = Route.Login.route){
+            composable(route = Route.Access.route){
+                AccessScreen{
+                    navController.navigate(Route.Login.route+"/$it")
+                }
+            }
 
+            composable(route = Route.Login.route+"/{mode}"){backStackEntry ->
+                val param: String = backStackEntry.arguments?.getString("mode") ?: "Not"
+                LoginScreen(mode = param)
             }
         }
 
@@ -36,7 +45,6 @@ fun NavGraph(
             startDestination = Route.HomeQr.route
         ){
             composable(route = Route.HomeQr.route){
-                Text(text = "Hola daniel")
             }
         }
     }
