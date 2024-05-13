@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -52,7 +53,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -68,12 +68,14 @@ dependencies {
 
     // Di
     implementation("com.google.dagger:hilt-android:2.48")
+    implementation(libs.firebase.auth)
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //Navigation
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // ConstaintLayout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
@@ -83,6 +85,19 @@ dependencies {
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+    //System ui
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.4-beta")
+
+    //Qr
+    implementation("com.google.zxing:core:3.5.1")
+
+    //Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.1")
+
+    implementation("androidx.compose.animation:animation:1.6.7")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
