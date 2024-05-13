@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640138426701",
+    "project_id": "qrshare-d0e20",
+    "storage_bucket": "qrshare-d0e20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640138426701:android:22c11137a3240f60b99f04",
+        "android_client_info": {
+          "package_name": "com.example.qrshare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4CAogR_XdpynoCfCIzc4aVPn78jAVq80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

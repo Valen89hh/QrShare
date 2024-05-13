@@ -41,7 +41,11 @@ fun NavGraph(
                 val param: String = backStackEntry.arguments?.getString("mode") ?: "Not"
                 val loginViewModel: LoginViewModel = hiltViewModel()
                 LoginScreen(mode = param, loginViewModel){
-                    navController.navigate(Route.AppHomeDestination.route)
+                    navController.navigate(Route.AppHomeDestination.route){
+                        popUpTo(navController.graph.startDestinationRoute!!) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }
