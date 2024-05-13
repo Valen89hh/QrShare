@@ -2,17 +2,22 @@ package com.example.qrshare.ui.components.buttons
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.qrshare.ui.theme.Gray33
+import com.example.qrshare.ui.theme.Gray40
+import com.example.qrshare.ui.theme.GrayDisable
 
 @Composable
 fun ButtonPrimary(
     modifier: Modifier = Modifier,
     text: String,
+    enable: Boolean = true,
+    loading: Boolean = false,
     onClick: ()-> Unit
 ) {
     Button(
@@ -20,13 +25,23 @@ fun ButtonPrimary(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Gray33
-        )
+            containerColor = Gray33,
+            contentColor = Color.White,
+            disabledContainerColor = GrayDisable,
+            disabledContentColor = Gray40
+        ),
+        enabled = enable
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White
-        )
+        if(loading){
+            CircularProgressIndicator(
+                color = Color.White
+            )
+        }else{
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+
     }
 }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -67,6 +68,7 @@ dependencies {
 
     // Di
     implementation("com.google.dagger:hilt-android:2.48")
+    implementation(libs.firebase.auth)
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     //Navigation
@@ -92,6 +94,10 @@ dependencies {
 
     //Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.1")
+
+    implementation("androidx.compose.animation:animation:1.6.7")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
