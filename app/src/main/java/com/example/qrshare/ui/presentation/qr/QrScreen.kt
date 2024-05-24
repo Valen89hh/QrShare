@@ -26,11 +26,17 @@ import androidx.compose.ui.unit.dp
 import android.Manifest
 import android.graphics.Bitmap
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import com.example.qrshare.R
 import com.example.qrshare.ui.components.buttons.ButtonSecondary
 import com.example.qrshare.ui.components.containers.Container
@@ -42,6 +48,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.journeyapps.barcodescanner.ScanContract
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -51,6 +58,12 @@ fun QrScreen(modifier: Modifier = Modifier) {
     var bitmap by remember {
         mutableStateOf<Bitmap?>(null)
     }
+    
+    val scanLauncher = rememberLauncherForActivityResult(contract = ScanContract) {
+        
+    }
+    
+    
     LaunchedEffect(Unit) {
         if(!storagePermissionState.status.isGranted){
             storagePermissionState.launchPermissionRequest()
@@ -98,6 +111,46 @@ fun QrScreen(modifier: Modifier = Modifier) {
 
                 }
 
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
+                    border = BorderStroke(1.dp, Color.White)
+                ) {
+                    Text(text = "Generar")
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White
+                    ),
+                    border = BorderStroke(1.dp, Color.White)
+
+                ) {
+                    Text(text = "Lector")
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp),
+                    border = BorderStroke(1.dp, Color.White)
+
+                ) {
+                    Text(text = "Registro")
+                }
             }
         }
     }

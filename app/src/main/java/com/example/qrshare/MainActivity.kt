@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             QrShareTheme {
 
-                NavGraph(startDestination = Route.AppStartDestination.route)
+                NavGraph(startDestination = Route.AppHomeDestination.route)
             }
         }
     }
