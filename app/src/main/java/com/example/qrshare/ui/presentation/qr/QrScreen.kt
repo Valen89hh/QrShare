@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import android.Manifest
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -65,6 +66,14 @@ fun QrScreen(modifier: Modifier = Modifier) {
     val scanLauncher = rememberLauncherForActivityResult(contract = ScanContract()) {result ->
         var resulContent = result.contents ?: "Sin contenido"
         Log.d("RESULT_QR", resulContent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(resulContent))
+            context.startActivity(intent)
+        }
+        catch (e: Exception){
+            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+        }
+
     }
     
     
@@ -88,7 +97,7 @@ fun QrScreen(modifier: Modifier = Modifier) {
             TopBar()
 
             Image(
-                painter = rememberQrBitmapPainter("https://dev.to", onChangeBitmap = { bitmap = it}),
+                painter = rememberQrBitmapPainter("https://dev.to", onChangeBitmap = { bitmap = it}, padding = 1.dp),
                 contentDescription = "DEV Communit Code",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
