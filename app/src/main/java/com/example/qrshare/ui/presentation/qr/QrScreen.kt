@@ -25,16 +25,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import android.Manifest
 import android.graphics.Bitmap
+import android.net.Uri
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import com.example.qrshare.R
 import com.example.qrshare.ui.components.buttons.ButtonSecondary
 import com.example.qrshare.ui.components.containers.Container
 import com.example.qrshare.ui.components.qr.rememberQrBitmapPainter
+import com.example.qrshare.ui.theme.Gray33
 import com.example.qrshare.ui.theme.Gray40
 import com.example.qrshare.ui.theme.Orange
 import com.example.qrshare.utils.BitmapUtils
@@ -42,6 +51,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -51,6 +62,21 @@ fun QrScreen(modifier: Modifier = Modifier) {
     var bitmap by remember {
         mutableStateOf<Bitmap?>(null)
     }
+    
+    val scanLauncher = rememberLauncherForActivityResult(contract = ScanContract()) {result ->
+        var resulContent = result.contents ?: "Sin contenido"
+        Log.d("RESULT_QR", resulContent)
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(resulContent))
+            context.startActivity(intent)
+        }
+        catch (e: Exception){
+            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+        }
+
+    }
+    
+    
     LaunchedEffect(Unit) {
         if(!storagePermissionState.status.isGranted){
             storagePermissionState.launchPermissionRequest()
@@ -71,33 +97,81 @@ fun QrScreen(modifier: Modifier = Modifier) {
             TopBar()
 
             Image(
-                painter = rememberQrBitmapPainter("https://dev.to", onChangeBitmap = { bitmap = it}),
+                painter = rememberQrBitmapPainter("https://dev.to", onChangeBitmap = { bitmap = it}, padding = 1.dp),
                 contentDescription = "DEV Communit Code",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .size(250.dp)
                     .align(Alignment.CenterHorizontally),
             )
-            ButtonSecondary(
-                text = "Compartir",
+
+            Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                if(bitmap != null){
-                    val qrUri = BitmapUtils.getImageUri(context, bitmap!!)
-                    if (qrUri != null){
-                        val sendIntent: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_STREAM, qrUri)
-                            type = "image/jpg"
-                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if(bitmap != null){
+                            val qrUri = BitmapUtils.getImageUri(context, bitmap!!)
+                            if (qrUri != null){
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_STREAM, qrUri)
+                                    type = "image/jpg"
+                                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                }
+                                context.startActivity(Intent.createChooser(sendIntent, null))
+                            }else{
+                                Toast.makeText(context,"Upps, ocurrio un error intenta más tarde", Toast.LENGTH_LONG).show()
+                            }
+
                         }
-                        context.startActivity(Intent.createChooser(sendIntent, null))
-                    }else{
-                        Toast.makeText(context,"Upps, ocurrio un error intenta más tarde", Toast.LENGTH_LONG).show()
-                    }
 
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = Gray33
+                    ),
+                    shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
+                    border = BorderStroke(1.dp, Color.White)
+                ) {
+                    Text(text = "Generar")
                 }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        val options = ScanOptions()
+                        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+                        options.setPrompt("Scan Qr Code")
+                        options.setCameraId(0)
+                        options.setBarcodeImageEnabled(true)
+                        options.setOrientationLocked(false)
+                        scanLauncher.launch(options)
+                    },
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = Gray33
+                    ),
+                    border = BorderStroke(1.dp, Color.White)
 
+                ) {
+                    Text(text = "Lector")
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = Gray33
+
+                    ),
+                    shape = RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp),
+                    border = BorderStroke(1.dp, Color.White)
+
+                ) {
+                    Text(text = "Registro")
+                }
             }
         }
     }
