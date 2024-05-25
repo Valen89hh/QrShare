@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import android.Manifest
 import android.graphics.Bitmap
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
@@ -41,6 +42,7 @@ import com.example.qrshare.R
 import com.example.qrshare.ui.components.buttons.ButtonSecondary
 import com.example.qrshare.ui.components.containers.Container
 import com.example.qrshare.ui.components.qr.rememberQrBitmapPainter
+import com.example.qrshare.ui.theme.Gray33
 import com.example.qrshare.ui.theme.Gray40
 import com.example.qrshare.ui.theme.Orange
 import com.example.qrshare.utils.BitmapUtils
@@ -49,6 +51,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -59,8 +62,9 @@ fun QrScreen(modifier: Modifier = Modifier) {
         mutableStateOf<Bitmap?>(null)
     }
     
-    val scanLauncher = rememberLauncherForActivityResult(contract = ScanContract) {
-        
+    val scanLauncher = rememberLauncherForActivityResult(contract = ScanContract()) {result ->
+        var resulContent = result.contents ?: "Sin contenido"
+        Log.d("RESULT_QR", resulContent)
     }
     
     
@@ -91,36 +95,33 @@ fun QrScreen(modifier: Modifier = Modifier) {
                     .size(250.dp)
                     .align(Alignment.CenterHorizontally),
             )
-            ButtonSecondary(
-                text = "Compartir",
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if(bitmap != null){
-                    val qrUri = BitmapUtils.getImageUri(context, bitmap!!)
-                    if (qrUri != null){
-                        val sendIntent: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_STREAM, qrUri)
-                            type = "image/jpg"
-                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        }
-                        context.startActivity(Intent.createChooser(sendIntent, null))
-                    }else{
-                        Toast.makeText(context,"Upps, ocurrio un error intenta más tarde", Toast.LENGTH_LONG).show()
-                    }
-
-                }
-
-            }
 
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        if(bitmap != null){
+                            val qrUri = BitmapUtils.getImageUri(context, bitmap!!)
+                            if (qrUri != null){
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_STREAM, qrUri)
+                                    type = "image/jpg"
+                                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                }
+                                context.startActivity(Intent.createChooser(sendIntent, null))
+                            }else{
+                                Toast.makeText(context,"Upps, ocurrio un error intenta más tarde", Toast.LENGTH_LONG).show()
+                            }
+
+                        }
+
+                    },
                     colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
+                        contentColor = Color.White,
+                        containerColor = Gray33
                     ),
                     shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
                     border = BorderStroke(1.dp, Color.White)
@@ -129,10 +130,19 @@ fun QrScreen(modifier: Modifier = Modifier) {
                 }
                 Button(
                     modifier = Modifier.weight(1f),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        val options = ScanOptions()
+                        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+                        options.setPrompt("Scan Qr Code")
+                        options.setCameraId(0)
+                        options.setBarcodeImageEnabled(true)
+                        options.setOrientationLocked(false)
+                        scanLauncher.launch(options)
+                    },
                     shape = RectangleShape,
                     colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
+                        contentColor = Color.White,
+                        containerColor = Gray33
                     ),
                     border = BorderStroke(1.dp, Color.White)
 
@@ -143,7 +153,9 @@ fun QrScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.weight(1f),
                     onClick = { /*TODO*/ },
                     colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White
+                        contentColor = Color.White,
+                        containerColor = Gray33
+
                     ),
                     shape = RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp),
                     border = BorderStroke(1.dp, Color.White)
